@@ -1,11 +1,12 @@
 import $ from 'jquery';
 import page from 'page';
+import store from 'store';
 
 const htmlTemplate = () => `
 <form class="ui form">
   <div class="field">
-    <label>Username</label>
-    <input type="text" name="username" placeholder="Username">
+    <label>Email</label>
+    <input type="text" name="username" placeholder="Email">
   </div>
   <div class="field">
     <label>Password</label>
@@ -20,8 +21,8 @@ const htmlTemplate = () => `
 `;
 class Login {
     constructor() {        
-        this.mainElement = document.createElement('div');         
-        $(this.mainElement).html(htmlTemplate());
+        this.mainElement = document.createElement('div');       
+        $(this.mainElement).html(htmlTemplate()).addClass('ui segment');
     }
     attach(containerElement) {
         $(containerElement).append(this.mainElement);
@@ -48,20 +49,23 @@ class Login {
             }  else          
                 throw Error(response.statusText);
         }).then((data) => {
-            localStorage.setItem('logged_in', true);
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('username', data.user.name);
-            page.redirect('/play');
+            store.set('logged_in', true);
+            store.set('token', data.token);
+            store.set('user', data.user);
+            $(this.mainElement).find('form input').val("");
+            // goes back to the previous URL (i.e., the page where Login was pressed)
+            history.go(-1);
         }).catch((error) => {
             $(this.mainElement).find('form').addClass('error');
             $(this.mainElement).find('form .message p').text(error.message);
             $(this.mainElement).find('form .message').show();
         });
     }
+    
     logout() {
-        localStorage.removeItem('logged_in');
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        store.remove('logged_in');
+        store.remove('token');
+        store.remove('user');
     }
 }
 
