@@ -8,7 +8,7 @@ import store from 'store';
 
 const container = document.querySelector(".my-component");
 
-page('/', check_login, index);
+page('/', check_login, index,);
 page('/products', check_login, products);
 page('/cart', check_login, cart);
 page('/login', login);
@@ -29,10 +29,21 @@ function check_login(ctx, next) {
     next();
 }
 
+function cartEl() {
+    if (store.get('logged_in')) {
+        let items = (store.get('cart') || []).length;
+        $('.cart-items').text(items);
+        $("#cart-menu").show();
+    } else {
+        $("#cart-menu").hide();
+    }
+}
+
 function index() {
     $(container).empty();
     $('#my-navbar a').removeClass('active');
     $('#my-navbar a[href="/"]').addClass('active');
+    cartEl();
 }
 
 function login() {
@@ -61,11 +72,13 @@ function notfound() {
 function products() {
     $(container).empty();
     productList.attach(container);
+    cartEl();
 }
 
 function cart() {
     $(container).empty();
     cartComponent.attach(container);
+    cartEl();
 }
 
 page.start();

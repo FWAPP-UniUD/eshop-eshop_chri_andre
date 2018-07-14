@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 // this is needed by the client-side routing facility (i.e., page)
 import history from 'express-history-api-fallback';
 import config from './config';
+import orders from './orders';
 
 import products from './products';
 
@@ -19,6 +20,7 @@ app.use(function(req, res, next) {
     next();
 });
 // here you can put the specific REST mountpoints
+app.use('/api/orders', orders);
 app.use('/api/login', login);
 app.use('/api/products', products);
 

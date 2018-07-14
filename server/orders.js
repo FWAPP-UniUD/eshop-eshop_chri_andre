@@ -1,6 +1,7 @@
 import jwt from 'express-jwt';
 import { Router } from 'express';
 import Order from './models/order';
+import User from './models/user';
 import config from './config';
 
 const router = Router();
@@ -14,9 +15,14 @@ router.use('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
+    const data = req.body;
+    console.log(data);
 
 });
 
 router.post('/', function(req, res, next) {
-    // fill in to manage a new order
+    const data = req.body;
+    console.log(data);
 });
+
+export default router;
